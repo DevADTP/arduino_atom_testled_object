@@ -23,8 +23,25 @@ volatile bool shouldWakeUp = false; // Variable de contrôle pour sortir du mode
 CRGB leds[NUM_LEDS];
 CRGB couleur = CRGB(0, 0, 0);
 
+
+//variables
+
+int incCas = 0;
+int incLight = 0;
+int nmled = 0;
+int iconActive = 0;  //0:off 1:white 2:red 3:green 4:blue
+
+int flipButton = 0;
+
+#define PERIOD_WAIT_BUTTON 500
+
+unsigned long nowTimeMillis = 0;
+unsigned long updateTimeButton = 0;
+
 //function declaration
-void modeLed(int levLed, int iconLight, int lightMandalou);
+void modeLed(int levLed, int iconLight, int lightMandalou, int nbled );
+void testLed();
+
 
 
 void setup() {
@@ -92,257 +109,2466 @@ int ledLevelEmotionBlue = 0;
 
 void loop() {
 
+  nowTimeMillis = millis();
+
   Serial.println("loop");
   shouldWakeUp = true;
-  if (shouldWakeUp) {
+  //if (shouldWakeUp) {
 
-    shouldWakeUp = false;
-    // Effectuer les actions nécessaires pour arrêter le mode sleep
-    shouldWakeUp = false; // Réinitialiser la variable de contrôle
+  if (nowTimeMillis > updateTimeButton )
+  {
+    updateTimeButton = nowTimeMillis + PERIOD_WAIT_BUTTON;
 
-    cas++;
-    Serial.print("cas n°");
-    if (cas > 65)cas = 0;
-    Serial.println(cas);
-
-    // Exemple : Imprimer un message après la sortie du mode sleep
-    Serial.println("Sortie du mode sleep");
-
-    switch (cas) {
-
-//icone only
-      case 0:  
-        modeLed(0, 0, 0);  //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 1:  
-        modeLed(20, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 2: 
-        modeLed(40, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 3: 
-        modeLed(60, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 4: 
-        modeLed(80, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 5: 
-        modeLed(100, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 6: 
-        modeLed(120, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 7: 
-        modeLed(140, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 8: 
-        modeLed(160, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 9: 
-        modeLed(180, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 10: 
-        modeLed(200, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 11: 
-        modeLed(220, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 12: 
-        modeLed(240, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 13:
-        modeLed(255, 1, 0); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-
-//icone white
-      case 14:  
-        modeLed(0, 0, 1);  //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 15:  
-        modeLed(20, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 16: 
-        modeLed(40, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 17: 
-        modeLed(60, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 18: 
-        modeLed(80, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 19: 
-        modeLed(100, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 20: 
-        modeLed(120, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 21: 
-        modeLed(140, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 22: 
-        modeLed(160, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 23: 
-        modeLed(180, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 24: 
-        modeLed(200, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 25: 
-        modeLed(220, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 26: 
-        modeLed(240, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 27:
-        modeLed(255, 1, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-
-//icone green
-
-      case 28:  
-        modeLed(0, 0, 2);  //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 29:  
-        modeLed(20, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 30: 
-        modeLed(40, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 31: 
-        modeLed(60, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 32: 
-        modeLed(80, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 33: 
-        modeLed(100, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 34: 
-        modeLed(120, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 35: 
-        modeLed(140, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 36: 
-        modeLed(160, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 37: 
-        modeLed(180, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 38: 
-        modeLed(200, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 39: 
-        modeLed(220, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 40: 
-        modeLed(240, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 41:
-        modeLed(255, 1, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-
-//no icone white
-      case 42:  
-        modeLed(0, 0, 1);  //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 43:  
-        modeLed(20, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 44: 
-        modeLed(40, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 45: 
-        modeLed(60, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 46: 
-        modeLed(80, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 47: 
-        modeLed(100, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 48: 
-        modeLed(120, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 49: 
-        modeLed(140, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 50: 
-        modeLed(160, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 51: 
-        modeLed(180, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 52: 
-        modeLed(200, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 53: 
-        modeLed(220, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 54: 
-        modeLed(240, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 55:
-        modeLed(255, 0, 1); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-
-//no icone green
-
-      case 56:  
-        modeLed(0, 0, 2);  //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 57:  
-        modeLed(20, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 58: 
-        modeLed(40, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 59: 
-        modeLed(60, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 60: 
-        modeLed(80, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 61: 
-        modeLed(100, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 62: 
-        modeLed(120, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 63: 
-        modeLed(140, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 64: 
-        modeLed(160, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 65: 
-        modeLed(180, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 66: 
-        modeLed(200, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 67: 
-        modeLed(220, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 68: 
-        modeLed(240, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
-      case 69:
-        modeLed(255, 0, 2); //modeLed(levLed,iconLight,lightMandalou 0:off 1:White 2:Green)
-        break;
+    if (flipButton == 0) {
 
 
-      default:
-        Serial.println("probleme indexation led");
-        break;
+      shouldWakeUp = false;
+      // Effectuer les actions nécessaires pour arrêter le mode sleep
+      shouldWakeUp = false; // Réinitialiser la variable de contrôle
+
+      cas++;
+      Serial.print("cas n°");
+      if (cas > 652)cas = 0;
+      Serial.println(cas);
+
+      // Exemple : Imprimer un message après la sortie du mode sleep
+      Serial.println("Sortie du mode sleep");
+
+      incCas = 0;
+
+      //*********************************************************************************************************************
+      /*
+        .__                                 ________  ______________________
+        |  | _____    _____ ______   ____   \_____  \ \_   _____/\_   _____/
+        |  | \__  \  /     \\____ \_/ __ \   /   |   \ |    __)   |    __)
+        |  |__/ __ \|  Y Y  \  |_> >  ___/  /    |    \|     \    |     \
+        |____(____  /__|_|  /   __/ \___  > \_______  /\___  /    \___  /
+                \/      \/|__|        \/          \/     \/         \/
+      */
+      //*********************************************************************************************************************
+      //white
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 1;  //0:off 1:white 2:red 3:green 4:blue
+      int lightActive = 0; //0:off 1:white 2:green
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      //****************************************************************************************************************
+      //red
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 2;  //0:off 1:white 2:red 3:green 4:blue
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+
+      //****************************************************************************************************************
+      //green
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 3;  //0:off 1:white 2:red 3:green 4:blue
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+
+      //****************************************************************************************************************
+      //blue
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 4;  //0:off 1:white 2:red 3:green 4:blue
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+
+
+      //*********************************************************************************************************************
+      /*
+        .__                                 __________.____       _____    _______  _________   ___ ______________
+        |  | _____    _____ ______   ____   \______   \    |     /  _  \   \      \ \_   ___ \ /   |   \_   _____/
+        |  | \__  \  /     \\____ \_/ __ \   |    |  _/    |    /  /_\  \  /   |   \/    \  \//    ~    \    __)_
+        |  |__/ __ \|  Y Y  \  |_> >  ___/   |    |   \    |___/    |    \/    |    \     \___\    Y    /        \
+        |____(____  /__|_|  /   __/ \___  >  |______  /_______ \____|__  /\____|__  /\______  /\___|_  /_______  /
+                \/      \/|__|        \/          \/        \/       \/         \/        \/       \/        \/
+      */
+      //*********************************************************************************************************************
+      //white
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 1;  //0:off 1:white 2:red 3:green 4:blue
+      lightActive = 1; //0:off 1:white 2:green
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      //****************************************************************************************************************
+      //red
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 2;  //0:off 1:white 2:red 3:green 4:blue
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+
+      //****************************************************************************************************************
+      //green
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 3;  //0:off 1:white 2:red 3:green 4:blue
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+
+      //****************************************************************************************************************
+      //blue
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 4;  //0:off 1:white 2:red 3:green 4:blue
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+
+
+
+      //*********************************************************************************************************************
+      /*
+        .__                                 ____   _______________________________________________
+        |  | _____    _____ ______   ____   \   \ /   /\_   _____/\______   \__    ___/\_   _____/
+        |  | \__  \  /     \\____ \_/ __ \   \   Y   /  |    __)_  |       _/ |    |    |    __)_
+        |  |__/ __ \|  Y Y  \  |_> >  ___/    \     /   |        \ |    |   \ |    |    |        \
+        |____(____  /__|_|  /   __/ \___  >    \___/   /_______  / |____|_  / |____|   /_______  /
+                \/      \/|__|        \/                     \/         \/                   \/
+      */
+      //*********************************************************************************************************************
+      //green
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 1;  //0:off 1:white 2:red 3:green 4:blue
+      lightActive = 2; //0:off 1:white 2:green
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      //****************************************************************************************************************
+      //red
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 2;  //0:off 1:white 2:red 3:green 4:blue
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+
+      //****************************************************************************************************************
+      //green
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 3;  //0:off 1:white 2:red 3:green 4:blue
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+
+      //****************************************************************************************************************
+      //blue
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 4;
+      iconActive = 4;  //0:off 1:white 2:red 3:green 4:blue
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+      // 14 etape par cas
+      // veilleuse off led 2 icone white
+      incLight = 0;
+      nmled = 5;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 3 icone white
+      incLight = 0;
+      nmled = 6;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+      // veilleuse off led 4 icone white
+      incLight = 0;
+      nmled = 7;  //4-7
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+      //*********************************************************************************************************************
+      /*
+        .__                                 ____   _______________________________________________               .__
+        |  | _____    _____ ______   ____   \   \ /   /\_   _____/\______   \__    ___/\_   _____/   ____   ____ |  | ___.__.
+        |  | \__  \  /     \\____ \_/ __ \   \   Y   /  |    __)_  |       _/ |    |    |    __)_   /  _ \ /    \|  |<   |  |
+        |  |__/ __ \|  Y Y  \  |_> >  ___/    \     /   |        \ |    |   \ |    |    |        \ (  <_> )   |  \  |_\___  |
+        |____(____  /__|_|  /   __/ \___  >    \___/   /_______  / |____|_  / |____|   /_______  /  \____/|___|  /____/ ____|
+                  \/      \/|__|        \/                     \/         \/                   \/              \/     \/
+      */
+      //*********************************************************************************************************************
+      //green
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 0;
+      iconActive = 0;  //0:off 1:white 2:red 3:green 4:blue
+      lightActive = 2; //0:off 1:white 2:green
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
+
+
+
+
+
+      //*********************************************************************************************************************
+      /*
+.__                                 __________.____       _____    _______  _________   ___ ______________               .__         
+|  | _____    _____ ______   ____   \______   \    |     /  _  \   \      \ \_   ___ \ /   |   \_   _____/   ____   ____ |  | ___.__.
+|  | \__  \  /     \\____ \_/ __ \   |    |  _/    |    /  /_\  \  /   |   \/    \  \//    ~    \    __)_   /  _ \ /    \|  |<   |  |
+|  |__/ __ \|  Y Y  \  |_> >  ___/   |    |   \    |___/    |    \/    |    \     \___\    Y    /        \ (  <_> )   |  \  |_\___  |
+|____(____  /__|_|  /   __/ \___  >  |______  /_______ \____|__  /\____|__  /\______  /\___|_  /_______  /  \____/|___|  /____/ ____|
+          \/      \/|__|        \/          \/        \/       \/         \/        \/       \/        \/              \/     \/     
+      */
+      //*********************************************************************************************************************
+      //green
+      // veilleuse off led 1 icone white
+      incLight = 0;
+      nmled = 0;
+      iconActive = 0;  //0:off 1:white 2:red 3:green 4:blue
+      lightActive = 1; //0:off 1:white 2:green
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = incLight + 20;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+      incCas++;
+      incLight = 255;
+      if (cas == incCas) modeLed(incLight, iconActive, lightActive, nmled);
+
+
+
     }
+
   }
 
-  delay(1000);  //debounce
-  Serial.println("deep sleep");
-  esp_light_sleep_start();
 
+  Serial.print("increment:");
+  Serial.println(incCas);
+  //delay(500);  //debounce
+  //Serial.println("deep sleep");
+  //esp_light_sleep_start();
+
+  //debug evite appui bouton
+  if (M5.Btn.wasPressed()) {
+    flipButton++;
+    if (flipButton >= 2) flipButton = 0;
+    delay(500);
+  }
+
+  M5.update();    //Read the press state of the key.
 }
 
 
@@ -364,7 +2590,7 @@ void enterSleep() {
 }
 
 
-void modeLed(int levLed, int iconLight, int lightMandalou)
+void modeLed(int levLed, int iconLight, int lightMandalou, int nbled )
 {
   //all off
   for (i = 0; i < NUM_LEDS; i++)
@@ -375,29 +2601,61 @@ void modeLed(int levLed, int iconLight, int lightMandalou)
   //icone white green red,blue
   if (iconLight == 1)
   {
-    leds[0] = CRGB(levLed , levLed , levLed); //white
-    leds[1] = CRGB(0, levLed , 0); //vert
-    leds[2] = CRGB(levLed , 0, 0); //rouge
-    leds[3] = CRGB(0, 0, levLed); //bleu
+    leds[nbled] = CRGB(levLed , levLed , levLed); //white
+  }
+
+  if (iconLight == 2)
+  {
+    leds[nbled] = CRGB(levLed , 0 , 0); //red
+  }
+
+  if (iconLight == 3)
+  {
+    leds[nbled] = CRGB(0 , levLed , 0); //green
+  }
+
+  if (iconLight == 4)
+  {
+    leds[nbled] = CRGB(0 , 0 , levLed); //blue
   }
 
   //icone bas 4 led
   if (lightMandalou == 1)
   {
-    leds[4] = CRGB(levLed , levLed , levLed ); //white 0->100%
-    leds[8] = CRGB(levLed , levLed , levLed ); //white 0->100%
-    leds[12] = CRGB(levLed , levLed , levLed ); //white 0->100%
-    leds[16] = CRGB(levLed , levLed , levLed ); //white 0->100%
+    leds[0] = CRGB(levLed , levLed , levLed ); //white 0->100%
+    leds[1] = CRGB(levLed , levLed , levLed ); //white 0->100%
+    leds[2] = CRGB(levLed , levLed , levLed ); //white 0->100%
+    leds[3] = CRGB(levLed , levLed , levLed ); //white 0->100%
   }
 
   //icone bas 4 led
   if (lightMandalou == 2)
   {
-    leds[4] = CRGB(0 , levLed , 0 ); //green 0->100%
-    leds[8] = CRGB(0 , levLed , 0 ); //green 0->100%
-    leds[12] = CRGB(0 , levLed , 0 ); //green 0->100%
-    leds[16] = CRGB(0 , levLed , 0 ); //green 0->100%
+    leds[0] = CRGB(0 , levLed , 0 ); //green 0->100%
+    leds[1] = CRGB(0 , levLed , 0 ); //green 0->100%
+    leds[2] = CRGB(0 , levLed , 0 ); //green 0->100%
+    leds[3] = CRGB(0 , levLed , 0 ); //green 0->100%
   }
   FastLED.show();
   delay(10);
+}
+
+
+
+void testLed()
+{
+  int j = 0;
+  //all off
+  for (i = 0; i < NUM_LEDS; i++)
+  {
+    leds[i] = CRGB::Black;
+  }
+
+  j = j + 1;
+  j = j % 20;
+  leds[j] = CRGB::Red;
+
+  FastLED.show();
+  delay(200);
+
 }
